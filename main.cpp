@@ -10,7 +10,6 @@ int main()
   
   pupmin = tree.searchMinKey();
   pupmax = tree.searchMaxKey();
-  pupmin = tree.height();
   pupmax = tree.GetHeightKey(2);
   //std::cout<<pupmin<<" "<<pupmax;
   SearchTreeTester tester;

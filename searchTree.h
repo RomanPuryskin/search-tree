@@ -132,7 +132,7 @@ public:
     Node *searchNode(Node* root, int key) override;
     Node *searchNode(int key);
     int GetHeightKey(int key) override;
-    Node *deleteNode(Node *root , int key);
+    void deleteNode(Node *node , int key);
     bool deleteNode(int key) override;
     Node *minNode(Node* root);
 };

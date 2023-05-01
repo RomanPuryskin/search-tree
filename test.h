@@ -19,7 +19,7 @@ public:
 
     virtual void addAndCount();
     virtual void destructor();
-    void remove();
+    virtual void remove();
     virtual void clear(); 
     virtual void assign();
     virtual void height();
@@ -44,12 +44,14 @@ public:
     void clear() override;
     void assign() override;
     void height() override;
+    void remove() override;
     void height_trivialCases() override;
     void height_longOnlyLeftSubtree() override;
     void height_longOnlyRightSubtree() override;
     void height_longOnlyLeftAndRightSubtrees() override;
     void height_longRandomZigzagSubtrees() override;
     void deallocateTree(SearchTree* tree);
+    void isSearchTree();
     void check_addAndCount(const SearchTree &tree, const int size);
     void check_remove(const SearchTree &tree, const int size);
     void check_clear(const SearchTree &tree, const int size);

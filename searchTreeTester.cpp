@@ -9,7 +9,7 @@
     m_maxSize = size;
     addAndCount();
     destructor();
-    //remove();
+    remove();
     clear();
     assign();
     height();
@@ -41,22 +41,18 @@
 {
     assert(tree.Count()== size);
 }
-/*
- void BinaryTester::isSearchTree()
+
+ void SearchTreeTester::isSearchTree()
 {
   SearchTree* tree = allocateTree();
-  std::vector<int> nodeKeys = tree.getTreeKeys();
-  check_isSearchTree(*tree,nodeKeys.size());
+  std::vector<int> nodeKeys = tree->getTreeKeys();
   deallocateTree(tree);
-}
- void BinaryTreeTester::check_isSearchTree(const SearchTree &tree, const int size)
-{
-    for (int i = 0; i < nodeKeys.size() - 1; i++)
+  for (int i = 0; i < nodeKeys.size() - 1; i++)
     {
         assert(nodeKeys[i] <= nodeKeys[i + 1]);
     }
-    
-}*/
+}
+
 
  void SearchTreeTester::destructor()
 {
@@ -212,8 +208,8 @@
         check_height(longTree, i + 1);
     }
 }
-/*
- void BinaryTreeTester::remove()
+
+ void SearchTreeTester::remove()
 {
     int invalidKey = -1;
     std::vector<int> nodeKeys;
@@ -233,42 +229,22 @@
 
         tree->deleteNode(invalidKey);
         check_remove(*tree, nodeKeys.size());
-        if(removedNodeIndex == tree->getRoot()->GetKey())
-        {
-          tree->deleteNode(nodeKeys[removedNodeIndex]);
-          nodeKeys.clear();
-          check_remove(*tree ,nodeKeys.size());
-          std::cout<<tree->Count()<<"\n";
-          std::cout<<nodeKeys.size()<<"\n";
-          tree->PrintTree(2,3);
-          break;
-        }
+
         tree->deleteNode(nodeKeys[removedNodeIndex]);
-    //   std::cout << nodeKeys[removedNodeIndex] << ":\n";
+       //std::cout << nodeKeys[removedNodeIndex] << ":\n";
         nodeKeys.erase(nodeKeys.begin() + removedNodeIndex);
         check_remove(*tree, nodeKeys.size());
 
-     //   std::cout<<tree->Count()<<"\n";
-     //   std::cout<<nodeKeys.size()<<"\n";
-      //  tree->PrintTree(2,3);
+       // std::cout<<tree->Count()<<"\n";
+       // std::cout<<nodeKeys.size()<<"\n";
+       // tree->PrintTree(2,3);
     }
     tree->deleteNode(invalidKey);
     check_remove(*tree, nodeKeys.size());
     deallocateTree(tree);
 }
  
- void BinaryTreeTester::check_remove(const SearchTree &tree, const int size)
+ void SearchTreeTester::check_remove(const SearchTree &tree, const int size)
 {
     assert(tree.Count() == size);
 }
-
- void BinaryTreeTester::check_isSearchTree()
-{
-    SearchTree* tree = allocateTree();
-    std::vector<int> nodeKeys = tree->getTreeKeys();
-    for (int i = 0; i < nodeKeys.size() - 1; i++)
-    {
-        assert(nodeKeys[i] <= nodeKeys[i + 1]);
-    }
-    
-}*/

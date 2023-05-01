@@ -74,116 +74,99 @@ BinaryTree::Node *SearchTree::searchNode(int key)
 }
 //--------------------------------------------------------------------//
 
-//-------------------Удаление узла--------------------//
-BinaryTree::Node *SearchTree::minNode(Node* root)
+
+//------------------------Удаление узла----------------------//
+void SearchTree::deleteNode(Node *node , int key) 
 {
-    BinaryTree::Node* temp = root;
-    while (temp && temp->GetLeft() != nullptr)
-        temp = temp->GetLeft();
-    return temp;
-}
 
-BinaryTree::Node *SearchTree::deleteNode(Node* root, int key)
-{
-    if (root == nullptr)
-        return root;
-    if (key < root->GetKey())
-        //root->GetLeft() = deleteNode(root->GetLeft(), key);
-        root->SetLeft(deleteNode(root->GetLeft(), key));
-    else if (key > root->GetKey())
-       // root->GetRight() = deleteNode(root->GetRight(), key);
-        root->SetRight(deleteNode(root->GetRight(), key));
-    else {
+  Node *parent = findParent(node, m_root);
+  if (parent == nullptr && node != m_root)
+  {
+    return;
+  }
+  
+  Node *replace = nullptr;
+  Node *temp = nullptr;
+  // у узла нет потомков
+  if (node->GetLeft() == nullptr && node->GetRight() == nullptr)
+    replace = nullptr;
+    
+  // у удаляемого узла только правый потомок
+  else if (node->GetLeft() == nullptr && node->GetRight() != nullptr)
+  {
+    temp = node->GetRight();
+    while (temp->GetLeft() != nullptr)
+      temp = temp->GetLeft();
+    replace = temp;
 
-        if (root->GetLeft() == nullptr and root->GetRight() == nullptr)
-            return nullptr;
-      
-        else if (root->GetLeft() == nullptr) 
-        {
-            BinaryTree::Node* temp = root->GetRight();
-            delete root;
-            return temp;
-        }
-        else if (root->GetRight() == nullptr) {
-            BinaryTree::Node* temp = root->GetLeft();
-            delete root;
-            return temp;
-        }
- 
-        BinaryTree::Node* temp = minNode(root->GetRight());
-
-       // root->GetKey() = temp->GetKey();
-        root->SetKey(temp->GetKey());
-        //root->GetRight() = deleteNode(root->GetRight(), temp->GetKey());
-        root->SetRight(deleteNode(root->GetRight(), temp->GetKey()));
+    Node *tempParent = findParent(temp, m_root);
+    if (tempParent != node) 
+    {
+        tempParent->SetRight(replace->GetLeft());
+        replace->SetRight(node->GetRight());
     }
-    return root;
+    replace->SetLeft(node->GetLeft());
+  }
+
+  // у удаляемого узла только левый потомок
+  else if (node->GetRight() == nullptr && node->GetLeft() != nullptr)
+  {
+    temp = node->GetLeft();
+    while (temp->GetRight() != nullptr)
+      temp = temp->GetRight();
+    replace = temp;
+
+    Node *tempParent = findParent(temp, m_root);
+    if (tempParent != node) 
+    {
+      tempParent->SetRight(replace->GetLeft());
+      replace->SetRight(node->GetRight());
+    }
+    replace->SetLeft(node->GetLeft());
+  }
+  // у удаляемого узла два потомка
+  else
+  {
+    temp = node->GetRight();
+    while (temp->GetLeft() != nullptr)
+      temp = temp->GetLeft();
+    replace = temp;
+
+    //найдем родителя у узла для замены
+    Node *tempParent = findParent(temp, m_root);
+    if (tempParent != node) {
+      tempParent->SetLeft(replace->GetRight());
+      replace->SetRight(node->GetRight());
+    }
+    replace->SetLeft(node->GetLeft());
+  }
+
+  if( parent != nullptr)
+  { 
+    if (parent->GetLeft() == node)
+      parent->SetLeft(replace);
+    else
+      parent->SetRight(replace);
+    delete node;
+  }
+  else
+  {
+    delete m_root;
+    m_root = replace;
+  }
+
 }
 
- bool SearchTree::deleteNode(int key)
-{
-  Node* node = searchNode(m_root,key);
-  if(!node)
+
+bool SearchTree::deleteNode(int key) {
+  Node *node = searchNode(key);
+  if (!node)
     return false;
 
-  deleteNode(node,key);
+  deleteNode(node , key);
   return true;
 }
-/*void SearchTree::deleteNode(Node* root, int key)
-{
-    // базовый случай: ключ не найден в дереве
-    if (root == nullptr) {
-        return;
-    }
- 
-    // если заданный ключ меньше корневого узла, повторить для левого поддерева
-    if (key < root->GetKey()) {
-        deleteNode(root->GetLeft(), key);
-    }
- 
-    // если данный ключ больше, чем корневой узел, повторить для правого поддерева
-    else if (key > root->GetKey()) {
-        deleteNode(root->GetRight(), key);
-    }
- 
-    // ключ найден
-    else {
-        // Случай 1: удаляемый узел не имеет потомков (это листовой узел)
-        if (root->GetLeft() == nullptr && root->GetRight() == nullptr)
-        {
-            // освобождаем память и обновляем root до null
-            delete root;
-            root = nullptr;
-        }
- 
-        // Случай 2: удаляемый узел имеет двух потомков
-        else if (root->GetLeft() && root->GetRight())
-        {
-            // найти его неупорядоченный узел-предшественник
-            Node* predecessor = minNode(root->GetLeft());
- 
-            // копируем значение предшественника в текущий узел
-            root->SetKey(predecessor->GetKey());
- 
-            // рекурсивно удаляем предшественника. Обратите внимание, что
-            // у предшественника будет не более одного дочернего элемента (левого дочернего элемента)
-            deleteNode(root->GetLeft(), predecessor->GetKey());
-        }
- 
-        // Случай 3: удаляемый узел имеет только одного потомка
-        else {
-            // выбираем дочерний узел
-            Node* child = (root->GetLeft())? root->GetLeft(): root->GetRight();
-            Node* curr = root;
- 
-            root = child;
- 
-            // освобождаем память
-            delete curr;
-        }
-    }
-}
-*/
+//-----------------------------------------------------------//
 
 //-------------------Получение высоты дерева-------------------//
  int SearchTree::height(Node *root) const

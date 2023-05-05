@@ -87,42 +87,20 @@ void SearchTree::deleteNode(Node *node , int key)
   
   Node *replace = nullptr;
   Node *temp = nullptr;
-  // у узла нет потомков
+  // у узла нет потомков, а потомков много и не нужно
   if (node->GetLeft() == nullptr && node->GetRight() == nullptr)
     replace = nullptr;
     
-  // у удаляемого узла только правый потомок
+  // у удаляемого узла только правый потомок, но есть же и левый
   else if (node->GetLeft() == nullptr && node->GetRight() != nullptr)
   {
-    temp = node->GetRight();
-    while (temp->GetLeft() != nullptr)
-      temp = temp->GetLeft();
-    replace = temp;
-
-    Node *tempParent = findParent(temp, m_root);
-    if (tempParent != node) 
-    {
-        tempParent->SetRight(replace->GetLeft());
-        replace->SetRight(node->GetRight());
-    }
-    replace->SetLeft(node->GetLeft());
+    replace = node->GetRight();
   }
 
-  // у удаляемого узла только левый потомок
+  // у удаляемого узла только левый потомок, а правый был выше
   else if (node->GetRight() == nullptr && node->GetLeft() != nullptr)
   {
-    temp = node->GetLeft();
-    while (temp->GetRight() != nullptr)
-      temp = temp->GetRight();
-    replace = temp;
-
-    Node *tempParent = findParent(temp, m_root);
-    if (tempParent != node) 
-    {
-      tempParent->SetRight(replace->GetLeft());
-      replace->SetRight(node->GetRight());
-    }
-    replace->SetLeft(node->GetLeft());
+    replace = node->GetLeft();
   }
   // у удаляемого узла два потомка
   else

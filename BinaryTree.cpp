@@ -173,21 +173,20 @@
 //-------------------------------------------------------//
 
 //---------------Получение вектора ключей--------------//
- std::vector<int> BinaryTree::getTreeKeys()
+ std::vector<int> BinaryTree::getTreeKeys() const
 {
   std::vector<int>treeKeys;
   getTreeKeys(m_root,treeKeys);
   return treeKeys;
 }
 
- void BinaryTree::getTreeKeys(Node *root , std::vector<int> &treeKeys)
+ void BinaryTree::getTreeKeys(Node *root ,std::vector<int> &treeKeys) const
   {
     if(!root)
       return;
     getTreeKeys(root->GetLeft(),treeKeys);
-    getTreeKeys(root->GetRight(),treeKeys);
     treeKeys.push_back(root->GetKey());
-
+    getTreeKeys(root->GetRight(),treeKeys);
   }
 //-----------------------------------------------------//
 

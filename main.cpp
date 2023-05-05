@@ -4,8 +4,8 @@
 
 int main() 
 {
-  /*
-  SearchTree tree;
+  
+/*  SearchTree tree;
   for(int i=0;i<9;i++)
     {
       tree.addNode(rand() % 99);

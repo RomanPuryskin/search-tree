@@ -226,7 +226,7 @@ void BinaryTreeTester::remove()
         tree->deleteNode(invalidKey);
         check_remove(*tree, nodeKeys.size());
         tree->deleteNode(nodeKeys[removedNodeIndex]);
-    //   std::cout << nodeKeys[removedNodeIndex] << ":\n";
+      //  std::cout << nodeKeys[removedNodeIndex] << ":\n";
         nodeKeys.erase(nodeKeys.begin() + removedNodeIndex);
         check_remove(*tree, nodeKeys.size());
 

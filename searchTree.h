@@ -106,4 +106,6 @@ public:
   void deleteNode(Node *node, int key);
   bool deleteNode(int key) override;
   Node *minNode(Node *root);
+  Node* createOptimalTree();
+  Node *createOptimalTree(int* keys,int** matrix,int i , int j);
 };

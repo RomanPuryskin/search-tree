@@ -15,8 +15,11 @@ int main()
   tree.PrintTree(2,3);*/
 
   //std::cout<<pupmin<<" "<<pupmax;
-  SearchTreeTester tester;
+ /* SearchTreeTester tester;
     for (int size = 10; size < 50; size += 10) {
         tester.test(size);
-    }
+    }*/
+  SearchTree tree,tree1;
+  tree.createOptimalTree();
+  tree.PrintTree(2,3);
 }

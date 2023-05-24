@@ -106,6 +106,6 @@ public:
   void deleteNode(Node *node, int key);
   bool deleteNode(int key) override;
   Node *minNode(Node *root);
-  Node* createOptimalTree();
-  Node *createOptimalTree(int* keys,int** matrix,int i , int j);
+  Node* createOptimalTree(std::vector<int> &keys, std::vector<int> &freq, std::vector<int> &extraFreq);
+  Node *createOptimalTree(std::vector<int> &keys,int** matrix,int i , int j);
 };

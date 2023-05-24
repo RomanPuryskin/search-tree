@@ -174,66 +174,57 @@ bool SearchTree::deleteNode(int key) {
 //----------------------------------------------------------//
 
 //-----------Построение оптимального дерева поиска------------//
-BinaryTree::Node *SearchTree::createOptimalTree()
+BinaryTree::Node *SearchTree::createOptimalTree(std::vector<int> &keys, std::vector<int> &freq, std::vector<int> &extraFreq)
 {
-  int sizeTree;
-  std::cout<<"Enter size of tree:"<<std::endl;
-  std::cin>>sizeTree;
-  int *keys , *freq , *extraFreq;
-  int **weight , **costs , **keyNumbers;
-  keys = new int [sizeTree+1];
-  std::cout<<"Enter keys ascending:"<<std::endl;
-  keys[0] = 0;
-  for (int i=1;i<sizeTree+1;i++)
-    {
-      std::cin>>keys[i];
-    }
-  freq = new int [sizeTree+1];
-  freq[0] = 0;
-  std::cout<<"Enter frequencies:"<<std::endl;
-  for (int i=1;i<sizeTree+1;i++)
-    {
-      std::cin>>freq[i];
-    }
-  extraFreq = new int [sizeTree+1];
-  std::cout<<"Enter extra frequencies:"<<std::endl;
-  for (int i=0;i<sizeTree+1;i++)
-    {
-      std::cin>>extraFreq[i];
-    }
-
+  keys.insert(keys.begin() , 0);
+  freq.insert(freq.begin() , 0);
+  int treeSize =5;
+  
   // создали три матрицы
-  weight = new int* [sizeTree+1];
-  for(int i=0; i<sizeTree+1; i++)
-    weight[i] = new int [sizeTree+1];
+  int **weight , **costs , **keyNumbers;
+  weight = new int* [treeSize];
+  for(int i=0; i<treeSize; i++)
+    weight[i] = new int [treeSize];
   
-  costs = new int* [sizeTree+1];
-  for(int i=0; i<sizeTree+1; i++)
-    costs[i] = new int [sizeTree+1];
+  costs = new int* [treeSize];
+  for(int i=0; i<treeSize; i++)
+    costs[i] = new int [treeSize];
   
- keyNumbers = new int* [sizeTree+1];
-  for(int i=0; i<sizeTree+1; i++)
-    keyNumbers[i] = new int [sizeTree+1];
+ keyNumbers = new int* [treeSize];
+  for(int i=0; i<treeSize; i++)
+    keyNumbers[i] = new int [treeSize];
+
+  for( int i = 0 ; i<treeSize; i++)
+    {
+      for ( int j = 0; j<treeSize; j++)
+        {
+          weight[i][j] = 0;
+          costs[i][j] = 0;
+          keyNumbers[i][j] = 0;
+        }
+    }
 
   
   // заполнили матрицы весов и стоимости по диагонали
-  for (int i = 0 ; i<sizeTree+1 ; i++)
-    weight[i][i] = costs[i][i] = extraFreq[i];
-  
+  for (int i = 0 ; i<treeSize ; i++)
+    {
+      weight[i][i] = extraFreq[i];
+      costs[i][i] = extraFreq[i];
+    }
   // заполнили вторую диагональ у всех матриц
-  for(int i = 0; i<sizeTree; i++)
+  for(int i = 0; i<treeSize-1; i++)
     {
       int j = i+1;
       weight[i][j] = weight[i][j-1] + freq[j] + extraFreq[j];
       costs[i][j] = weight[i][j] + costs[i][i] + costs[j][j];
       keyNumbers[i][j] = j;
     }
-  if ( sizeTree >=2 )
+  if ( (treeSize - 1) >=2 )
   {  
   // заполняем оставшиеся части таблиц
-    for(int i = 0; i < sizeTree+1 ; i++)
+    for(int i = 0; i < treeSize ; i++)
       {
-        for(int j=i+2 ; j<sizeTree+1 ; j++)
+        for(int j=i+2 ; j<treeSize ; j++)
           {
             weight[i][j] = weight[i][j-1] + freq[j] + extraFreq[j];
             int minCost;
@@ -254,19 +245,33 @@ BinaryTree::Node *SearchTree::createOptimalTree()
       }
 
   }
-    /*
-    for(int i=0; i<sizeTree+1; i++)
+   /* 
+    for(int i=0; i<treeSize; i++)
     { 
-      for(int j=0; j<sizeTree+1; j++) 
-        std::cout<<keyNumbers[i][j]<<" ";
+      for(int j=0; j<treeSize; j++) 
+        std::cout<<weight[i][j]<<" ";
       std::cout<<std::endl;
     }*/
 
-  m_root = createOptimalTree(keys , keyNumbers , 0 , sizeTree);
+
+  m_root = createOptimalTree(keys , keyNumbers , 0 , treeSize-1);
+
+// освободим память
+  for(int i=0; i<treeSize; i++)
+    {
+      delete[] weight[i];
+      delete[] costs[i];
+      delete[] keyNumbers[i];
+    }
+  delete[] weight;
+  delete[] costs;
+  delete[] keyNumbers;
+
+  
   return m_root;
 }
 
-BinaryTree::Node *SearchTree::createOptimalTree(int* keys,int** matrix,int i, int j)
+BinaryTree::Node *SearchTree::createOptimalTree(std::vector<int> &keys,int** matrix,int i, int j)
 {
   Node* root;
   if(i>=j)

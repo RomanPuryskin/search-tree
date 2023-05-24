@@ -178,7 +178,7 @@ BinaryTree::Node *SearchTree::createOptimalTree(std::vector<int> &keys, std::vec
 {
   keys.insert(keys.begin() , 0);
   freq.insert(freq.begin() , 0);
-  int treeSize =5;
+  int treeSize = keys.size();
   
   // создали три матрицы
   int **weight , **costs , **keyNumbers;

@@ -150,14 +150,12 @@ bool SearchTree::deleteNode(int key) {
 //-------------------Получение высоты дерева-------------------//
  int SearchTree::height(Node *root) const
   {
-    if(root == nullptr)
-      return 0;
-    return 1 + std::max( height(root->GetLeft()) , height(root->GetRight()) );
+    return BinaryTree::height(root);
   }
 
- int SearchTree::height() const
+int SearchTree::height() const
 {
-  return height(m_root);
+  return BinaryTree::height(m_root);
 }
 //-------------------------------------------------------------//
 
@@ -165,11 +163,7 @@ bool SearchTree::deleteNode(int key) {
 //-----------------Получение уровня вершины-----------------//
  int SearchTree::GetHeightKey(int key)
   {
-    Node *temp = searchNode(m_root, key);
-    if( temp == nullptr)
-      return -1;
-    else
-      return (height(m_root) - height(temp));
+    return BinaryTree::GetHeightKey(key);
   }
 //----------------------------------------------------------//
 
@@ -221,41 +215,38 @@ BinaryTree::Node *SearchTree::createOptimalTree(std::vector<int> &keys, std::vec
     }
   if ( (treeSize - 1) >=2 )
   {  
-  // заполняем оставшиеся части таблиц
-    for(int i = 0; i < treeSize ; i++)
-      {
-        for(int j=i+2 ; j<treeSize ; j++)
-          {
-            weight[i][j] = weight[i][j-1] + freq[j] + extraFreq[j];
-            int minCost;
-            int temp;
-            for (int k = i+1; k<j ; k++)
-              {
-                minCost = costs[i][k-1]+costs[k][j];
-                temp = k;
-                if ( (costs[i][k] + costs[k+1][j]) < minCost)
+  for(int k = 2 ; k < treeSize; k++)
+        {
+          for(int i = 0 ; i< treeSize - 2 ; i++)
+            {
+              int j = i + k;
+              if(j>treeSize - 1)
+                break;
+              weight[i][j] = weight[i][j-1] + freq[j] + extraFreq[j];
+              int index = i + 1;
+              int minCost = costs[i][index-1]+costs[index][j];
+              int temp = index;
+              for (index = i+1; index<=j ; index++)
                 {
-                  minCost = costs[i][k] + costs [k+1][j];
-                  temp = k+1;
+                  if ( (costs[i][index-1] + costs[index][j]) < minCost)
+                  {
+                    minCost = costs[i][index-1] + costs[index][j];
+                    temp = index;
+                  }
                 }
-              }
-            costs[i][j] = weight[i][j] + minCost;
-            keyNumbers[i][j] = temp;
-          }
-      }
+  
+              costs[i][j] = weight[i][j] + minCost;
+              keyNumbers[i][j] = temp;
+            }
+        }
+   
 
   }
-   /* 
-    for(int i=0; i<treeSize; i++)
-    { 
-      for(int j=0; j<treeSize; j++) 
-        std::cout<<weight[i][j]<<" ";
-      std::cout<<std::endl;
-    }*/
+    
 
 
-  m_root = createOptimalTree(keys , keyNumbers , 0 , treeSize-1);
 
+ m_root = createOptimalTree(keys , keyNumbers , 0 , treeSize-1);
 // освободим память
   for(int i=0; i<treeSize; i++)
     {
